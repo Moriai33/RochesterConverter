@@ -49,11 +49,6 @@ namespace RochesterConverter.Application
             {
                 for (int i = 1; i < itemRow.Count(); i++)
                 {
-                    if (index > 1 & i == 8)
-                    {
-                        cvsString.Append("\"=\"\"" + itemRow.ElementAt(i) + "\"\"\",");
-                        continue;
-                    }
                     cvsString.Append(itemRow.ElementAt(i) + ",");
                 }
                 cvsString.Remove(cvsString.Length - 1, 1);
@@ -122,8 +117,8 @@ namespace RochesterConverter.Application
                 var unitCost = StringToConverterDouble(shortedString[shortedString.Length - 3].Trim(_trimCharArray), new CultureInfo("en-US"));
                 var orderCost = StringToConverterDouble(shortedString[shortedString.Length - 2].Trim(_trimCharArray), new CultureInfo("en-US"));
                 var rcvCost = StringToConverterDouble(shortedString[shortedString.Length - 1].Trim(_trimCharArray), new CultureInfo("en-US"));
-
-                if (shortedString[1].Length == 10 & int.TryParse(shortedString[1], out var _)) 
+                
+                if (shortedString[1].Length == 10 && long.TryParse(shortedString[1], out var _)) 
                     opc = shortedString[1];
 
                 for (int i = 2; i < shortedString.Length - 7; i++)
