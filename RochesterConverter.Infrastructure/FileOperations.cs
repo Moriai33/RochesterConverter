@@ -20,7 +20,6 @@ namespace RochesterConverter.Infrastructure
                 var image = rasterizer.GetPage(500, i + 1);
                 images.Add(image);
             }
-
             return images;
         }
 

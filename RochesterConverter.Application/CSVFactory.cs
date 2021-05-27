@@ -33,9 +33,9 @@ namespace RochesterConverter.Application
                 new string[] { "", "H", $"{order.OrderDate.Month}/{order.OrderDate.Day}/{order.OrderDate.Year}", $"{order.CustomerAccount}", "", $"{order.PO}", $"{order.GetMasPO()}", $"{order.GetMasPO()}", "", "", "", "" }
             };
 
-            for (int i = 2; i < order.ItemList.Count() + 2; i++)
+            for (int i = 0; i < order.ItemList.Count(); i++)
             {
-                listViewStringList.Add(new string[] { $"{order.ItemList.ElementAt(i - 2).ID}", "1", "", "", "", "", "", "", $"{order.ItemList.ElementAt(i - 2).OPC}", $"{order.ItemList.ElementAt(i - 2).OrderNumber}", "", "N" });
+                listViewStringList.Add(new string[] { $"{order.ItemList.ElementAt(i).ID}", "1", "", "", "", "", "", "", $"{order.ItemList.ElementAt(i).OPC}", $"{order.ItemList.ElementAt(i).OrderNumber}", "", "N" });
             }
 
             return listViewStringList;
@@ -43,7 +43,6 @@ namespace RochesterConverter.Application
 
         public string CreateCSVData(IEnumerable<IEnumerable<string>> listViewStringList)
         {
-            int index = 0;
             StringBuilder cvsString = new StringBuilder();
             foreach (var itemRow in listViewStringList)
             {
@@ -53,7 +52,6 @@ namespace RochesterConverter.Application
                 }
                 cvsString.Remove(cvsString.Length - 1, 1);
                 cvsString.Append("\n");
-                index++;
             }
             return cvsString.ToString();
         }

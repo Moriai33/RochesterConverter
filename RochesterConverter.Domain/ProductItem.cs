@@ -13,7 +13,6 @@
         public double OrderCost { get; }
         public double RCVCost { get; }
 
-
         public ProductItem(int id, string opc, string description, string lre, int orderNumber, int rcv, int bo, double unitCost, double orderCost, double rcvCost)
         {
             ID = id;

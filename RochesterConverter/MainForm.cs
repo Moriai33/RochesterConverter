@@ -129,83 +129,47 @@ namespace RochesterConverter
                 }
                 else if (orderListView.Items[1].Selected)
                 {
-                    if (_validateService.ValidateOrderDate(orderDateTextBox.Text))
-                    {
-                        var date = DateTime.Parse(orderDateTextBox.Text);
-                        orderListView.SelectedItems[0].SubItems[2].Text = $"{date.Month}/{date.Day}/{date.Year}";
-                        orderListView.SelectedItems[0].BackColor = Color.White;
-                    }
-                    else
-                    {
-                        MessageBox.Show("Not a valid date");
-                    }
-
-                    if (_validateService.ValidateCustomer(customerTextBox.Text))
-                    {
-                        orderListView.SelectedItems[0].SubItems[3].Text = customerTextBox.Text;
-                        orderListView.SelectedItems[0].BackColor = Color.White;
-                    }
-                    else
-                    {
-                        MessageBox.Show("The Customer length must be 7");
-                    }
-
-                    if (_validateService.ValidateUDF(UDFDocTextBox.Text))
-                    {
-                        orderListView.SelectedItems[0].SubItems[5].Text = UDFDocTextBox.Text;
-                        orderListView.SelectedItems[0].BackColor = Color.White;
-                    }
-                    else
-                    {
-                        MessageBox.Show("The UDF doc length must be 10");
-                    }
-
-                    if (_validateService.ValidateMassPO(MASPOTextBox.Text))
-                    {
-                        orderListView.SelectedItems[0].SubItems[6].Text = MASPOTextBox.Text;
-                        orderListView.SelectedItems[0].BackColor = Color.White;
-                    }
-                    else
-                    {
-                        MessageBox.Show("The MAS PO length must be 15");
-                    }
-
-                    if (_validateService.ValidateMassPO(UDFPOTextBox.Text))
-                    {
-                        orderListView.SelectedItems[0].SubItems[7].Text = UDFPOTextBox.Text;
-                        orderListView.SelectedItems[0].BackColor = Color.White;
-                    }
-                    else
-                    {
-                        MessageBox.Show("The UDF PO length must be 15");
-                    }
+                    ValidationErrorMessageDate(_validateService.ValidateOrderDate, orderDateTextBox.Text, 2, "Not a valid date");
+                    ValidationErrorMessage(_validateService.ValidateCustomer, customerTextBox.Text, 3, "The Customer length must be 7");
+                    ValidationErrorMessage(_validateService.ValidateUDF, UDFDocTextBox.Text, 5, "The UDF doc length must be 10");
+                    ValidationErrorMessage(_validateService.ValidateMassPO, MASPOTextBox.Text, 6, "The MAS PO length must be 15");
+                    ValidationErrorMessage(_validateService.ValidateMassPO, UDFPOTextBox.Text, 7, "The UDF PO length must be 15");
                 }
                 else
                 {
-                    if (_validateService.ValidateItemCode(itemCodeTextBox.Text))
-                    {
-                        orderListView.SelectedItems[0].SubItems[8].Text = itemCodeTextBox.Text;
-                        orderListView.SelectedItems[0].BackColor = Color.White;
-                    }
-                    else
-                    {
-                        MessageBox.Show("Item code length must be 10");
-                    }
-
-                    if (_validateService.ValidateQty(qtyTextBox.Text))
-                    {
-                        orderListView.SelectedItems[0].SubItems[9].Text = qtyTextBox.Text;
-                        orderListView.SelectedItems[0].BackColor = Color.White;
-                    }
-                    else
-                    {
-                        MessageBox.Show("Qty must be number except zero");
-                    }
+                    ValidationErrorMessage(_validateService.ValidateItemCode, itemCodeTextBox.Text, 8, "Item code length must be 10");
+                    ValidationErrorMessage(_validateService.ValidateQty, qtyTextBox.Text, 9, "Qty must be number except zero");
                 }
                 TextBoxTextClear();
                 LoadErrorListViewData();
                 orderListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
                 orderListView.SelectedIndices.Clear();
+            }
+        }
+
+        private void ValidationErrorMessage(Func<string, bool> func,string textBoxText,int index, string errorMessage )
+        {
+            if (func(textBoxText))
+            {
+                orderListView.SelectedItems[0].SubItems[index].Text = textBoxText;
+                orderListView.SelectedItems[0].BackColor = Color.White;
+            }
+            else
+            {
+                MessageBox.Show(errorMessage);
+            }
+        }
+        private void ValidationErrorMessageDate(Func<string, bool> func, string textBoxText, int index, string errorMessage)
+        {
+            if (func(textBoxText))
+            {
+                var date = DateTime.Parse(orderDateTextBox.Text);
+                orderListView.SelectedItems[0].SubItems[index].Text = $"{date.Month}/{date.Day}/{date.Year}";
+                orderListView.SelectedItems[0].BackColor = Color.White;
+            }
+            else
+            {
+                MessageBox.Show(errorMessage);
             }
         }
 

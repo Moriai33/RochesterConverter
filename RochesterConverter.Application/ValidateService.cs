@@ -13,7 +13,6 @@ namespace RochesterConverter.Application
         public ValidateService()
         {
             errorList = new List<Error>();
-          
         }
         public List<Error> GetErrors(IEnumerable<IEnumerable<string>> listViewStringList)
         {
@@ -56,7 +55,7 @@ namespace RochesterConverter.Application
         }
         public bool ValidateOrderDate(string text)
         {
-                return (DateTime.TryParse(text, new CultureInfo("en-US"), 0, out var date) && date.Year > 2000);
+            return (DateTime.TryParse(text, new CultureInfo("en-US"), 0, out var date) && date.Year > 2000);
         }
         public bool ValidateUDF(string text)
         {
