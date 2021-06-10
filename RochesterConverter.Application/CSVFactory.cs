@@ -115,7 +115,9 @@ namespace RochesterConverter.Application
                 var unitCost = StringToConverterDouble(shortedString[shortedString.Length - 3].Trim(_trimCharArray), new CultureInfo("en-US"));
                 var orderCost = StringToConverterDouble(shortedString[shortedString.Length - 2].Trim(_trimCharArray), new CultureInfo("en-US"));
                 var rcvCost = StringToConverterDouble(shortedString[shortedString.Length - 1].Trim(_trimCharArray), new CultureInfo("en-US"));
-                
+
+                if (shortedString[1].Contains("."))
+                    shortedString[1] = shortedString[1].Replace(".", "");
                 if (shortedString[1].Length == 10 && long.TryParse(shortedString[1], out var _)) 
                     opc = shortedString[1];
 

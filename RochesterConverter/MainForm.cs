@@ -1,5 +1,6 @@
 ﻿using RochesterConverter.Application.Interface;
 using RochesterConverter.Domain;
+using RochesterConverter.Presentation;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -15,6 +16,7 @@ namespace RochesterConverter
         private readonly ICSVFactory _CSVFactory;
         private readonly IPDFToImageConverterService _PDFToImageConverterService;
         private readonly IValidateService _validateService;
+        private readonly string[] _InputTextBoxText = { "", "", "Date", "Customer","", "UDF doc", "MAS PO", "UDF PO", "Item code", "Qty", "", "", };
 
         public MainForm(ICSVFactory iCSVFactory, IPDFToImageConverterService iPDFToImageConverterService, IValidateService validateService)
         {
@@ -129,50 +131,84 @@ namespace RochesterConverter
                 }
                 else if (orderListView.Items[1].Selected)
                 {
-                    ValidationErrorMessageDate(_validateService.ValidateOrderDate, orderDateTextBox.Text, 2, "Not a valid date");
-                    ValidationErrorMessage(_validateService.ValidateCustomer, customerTextBox.Text, 3, "The Customer length must be 7");
-                    ValidationErrorMessage(_validateService.ValidateUDF, UDFDocTextBox.Text, 5, "The UDF doc length must be 10");
-                    ValidationErrorMessage(_validateService.ValidateMassPO, MASPOTextBox.Text, 6, "The MAS PO length must be 15");
-                    ValidationErrorMessage(_validateService.ValidateMassPO, UDFPOTextBox.Text, 7, "The UDF PO length must be 15");
+                    ValidationErrorMessage(2, orderDateTextBox.Text);
+                    ValidationErrorMessage(3, customerTextBox.Text);
+                    ValidationErrorMessage(5, UDFDocTextBox.Text);
+                    ValidationErrorMessage(6, MASPOTextBox.Text);
+                    ValidationErrorMessage(7, UDFPOTextBox.Text);
                 }
                 else
                 {
-                    ValidationErrorMessage(_validateService.ValidateItemCode, itemCodeTextBox.Text, 8, "Item code length must be 10");
-                    ValidationErrorMessage(_validateService.ValidateQty, qtyTextBox.Text, 9, "Qty must be number except zero");
+                    ValidationErrorMessage(8, itemCodeTextBox.Text);
+                    ValidationErrorMessage(9, qtyTextBox.Text);
                 }
-                TextBoxTextClear();
-                LoadErrorListViewData();
-                orderListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
-                orderListView.SelectedIndices.Clear();
             }
+            TextBoxTextClear();
+            LoadErrorListViewData();
+            orderListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+            orderListView.SelectedIndices.Clear();
+        }
+        private void orderListView_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (orderListView.Items[0].Selected)
+            {
+                MessageBox.Show("The first row cannot be modified.");
+            }
+            else
+            {
+                var index = orderListView.SelectedItems[0].SubItems.IndexOf(orderListView.GetItemAt(e.X, e.Y).GetSubItemAt(e.X, e.Y));
+
+                if(CellModificationItemCodeRow(index) || CellModificationHeader(index))
+                {
+                    ValidationErrorMessageWithInputBox(index);
+                }
+                else
+                {
+                    MessageBox.Show("This cell cannot be modified.");
+                }
+            }
+            TextBoxTextClear();
+            LoadErrorListViewData();
+            orderListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+            orderListView.SelectedIndices.Clear();
+        }
+        public bool CellModificationHeader(int index)
+        {
+            return (orderListView.Items[1].Selected && (index == 2 || index == 3 || index == 5 || index == 6 || index == 7));
+        }
+        public bool CellModificationItemCodeRow(int index)
+        {
+            return (!orderListView.Items[1].Selected && (index == 8 || index == 9 ));
         }
 
-        private void ValidationErrorMessage(Func<string, bool> func,string textBoxText,int index, string errorMessage )
+        private void ValidationErrorMessage(int index, string textBoxText)
         {
-            if (func(textBoxText))
+            if (_validateService.ValidateByIndex(index, textBoxText))
             {
+                if (index == 2)
+                {
+                    var date = DateTime.Parse(textBoxText);
+                    textBoxText = $"{date.Month}/{date.Day}/{date.Year}";
+                }
                 orderListView.SelectedItems[0].SubItems[index].Text = textBoxText;
                 orderListView.SelectedItems[0].BackColor = Color.White;
             }
             else
             {
-                MessageBox.Show(errorMessage);
+                MessageBox.Show(_validateService.GetErrorMessageTextByIndex(index));
             }
         }
-        private void ValidationErrorMessageDate(Func<string, bool> func, string textBoxText, int index, string errorMessage)
+        private void ValidationErrorMessageWithInputBox(int index)
         {
-            if (func(textBoxText))
-            {
-                var date = DateTime.Parse(orderDateTextBox.Text);
-                orderListView.SelectedItems[0].SubItems[index].Text = $"{date.Month}/{date.Day}/{date.Year}";
-                orderListView.SelectedItems[0].BackColor = Color.White;
-            }
-            else
-            {
-                MessageBox.Show(errorMessage);
-            }
-        }
+            string inputText = string.Empty;
+            var inputBox = new InputBox();
+            var dialogResult = inputBox.Show(_InputTextBoxText[index], ref inputText);
+            if (dialogResult==DialogResult.Cancel)
+                return;
 
+            ValidationErrorMessage(index, inputText);
+        }
+        
         private void CreateColumnsAllListView()
         {
             orderListView.Columns.Add("", 100);

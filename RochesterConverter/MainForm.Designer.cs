@@ -145,13 +145,16 @@ namespace RochesterConverter
             // 
             this.orderListView.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.orderListView.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.orderListView.FullRowSelect = true;
             this.orderListView.HideSelection = false;
             this.orderListView.Location = new System.Drawing.Point(0, 306);
+            this.orderListView.MultiSelect = false;
             this.orderListView.Name = "orderListView";
             this.orderListView.Size = new System.Drawing.Size(1336, 548);
             this.orderListView.TabIndex = 6;
             this.orderListView.UseCompatibleStateImageBehavior = false;
             this.orderListView.Click += new System.EventHandler(this.ListView1_Click);
+            this.orderListView.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.orderListView_MouseDoubleClick);
             // 
             // orderDateTextBox
             // 
@@ -275,7 +278,7 @@ namespace RochesterConverter
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
-            this.Text = "Rochester Converter";
+            this.Text = "Rochester Converter v1.4";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
