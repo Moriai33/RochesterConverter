@@ -51,6 +51,7 @@ namespace RochesterConverter
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.errorListView = new System.Windows.Forms.ListView();
+            this.dirtyCheckBox = new System.Windows.Forms.CheckBox();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -252,11 +253,23 @@ namespace RochesterConverter
             this.errorListView.TabIndex = 7;
             this.errorListView.UseCompatibleStateImageBehavior = false;
             // 
+            // dirtyCheckBox
+            // 
+            this.dirtyCheckBox.AutoSize = true;
+            this.dirtyCheckBox.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.dirtyCheckBox.Location = new System.Drawing.Point(337, 44);
+            this.dirtyCheckBox.Name = "dirtyCheckBox";
+            this.dirtyCheckBox.Size = new System.Drawing.Size(63, 25);
+            this.dirtyCheckBox.TabIndex = 8;
+            this.dirtyCheckBox.Text = "Dirty";
+            this.dirtyCheckBox.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1336, 854);
+            this.Controls.Add(this.dirtyCheckBox);
             this.Controls.Add(this.errorListView);
             this.Controls.Add(this.orderListView);
             this.Controls.Add(this.saveButton);
@@ -278,7 +291,7 @@ namespace RochesterConverter
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
-            this.Text = "Rochester Converter v1.4";
+            this.Text = "Rochester Converter v1.6";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -310,6 +323,7 @@ namespace RochesterConverter
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.ListView errorListView;
+        private System.Windows.Forms.CheckBox dirtyCheckBox;
     }
 }
 

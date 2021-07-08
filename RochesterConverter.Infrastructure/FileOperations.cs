@@ -9,7 +9,7 @@ namespace RochesterConverter.Infrastructure
 {
     internal class FileOperations : IFileOperations
     {
-        public List<Image> LoadPdfAsImage(string path)
+        public List<Image> LoadPdfAsImage(string path, int dpi)
         {
             using var rasterizer = new GhostscriptRasterizer();
             rasterizer.Open(path);
@@ -17,7 +17,7 @@ namespace RochesterConverter.Infrastructure
             var images = new List<Image>();
             for (int i = 0; i < rasterizer.PageCount; i++)
             {
-                var image = rasterizer.GetPage(500, i + 1);
+                var image = rasterizer.GetPage(dpi, i + 1);
                 images.Add(image);
             }
             return images;

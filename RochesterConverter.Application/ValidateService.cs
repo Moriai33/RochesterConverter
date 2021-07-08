@@ -63,7 +63,7 @@ namespace RochesterConverter.Application
         }
         public bool ValidateItemCode(string text)
         {
-            return text.Length == 10;
+            return double.TryParse(text, out var _) && text.Length == 10;
         }
         public bool ValidateQty(string text)
         {
@@ -71,11 +71,11 @@ namespace RochesterConverter.Application
         }
         public bool ValidateMassPO(string text)
         {
-            return text.Length == 15;
+            return text.Length == 15 || text.Length == 16;
         }
         public bool ValidateUdfPO(string text)
         {
-            return text.Length == 15;
+            return text.Length == 15 || text.Length == 16;
         }
         public bool ValidateCustomer(string text)
         {

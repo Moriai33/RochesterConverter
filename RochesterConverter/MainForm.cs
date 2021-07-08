@@ -48,7 +48,15 @@ namespace RochesterConverter
                 TextBoxTextClear();
                 label1.Text = "Loading...";
                 label1.Refresh();
-                var images = _PDFToImageConverterService.LoadPdfAsImage(path.FileName);
+                List<Image> images;
+                if (dirtyCheckBox.Checked)
+                {
+                    images = _PDFToImageConverterService.LoadPdfAsImage(path.FileName, 1000);
+                }
+                else
+                {
+                    images = _PDFToImageConverterService.LoadPdfAsImage(path.FileName,500);
+                }
                 var number = _PDFToImageConverterService.SaveImages(images);
                 images.ForEach(x => x.Dispose());
                 var ocrString = _CSVFactory.OCRImages(number);
@@ -142,11 +150,12 @@ namespace RochesterConverter
                     ValidationErrorMessage(8, itemCodeTextBox.Text);
                     ValidationErrorMessage(9, qtyTextBox.Text);
                 }
+
+                TextBoxTextClear();
+                LoadErrorListViewData();
+                orderListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+                orderListView.SelectedIndices.Clear();
             }
-            TextBoxTextClear();
-            LoadErrorListViewData();
-            orderListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
-            orderListView.SelectedIndices.Clear();
         }
         private void orderListView_MouseDoubleClick(object sender, MouseEventArgs e)
         {
@@ -158,7 +167,7 @@ namespace RochesterConverter
             {
                 var index = orderListView.SelectedItems[0].SubItems.IndexOf(orderListView.GetItemAt(e.X, e.Y).GetSubItemAt(e.X, e.Y));
 
-                if(CellModificationItemCodeRow(index) || CellModificationHeader(index))
+                if (CellModificationItemCodeRow(index) || CellModificationHeader(index))
                 {
                     ValidationErrorMessageWithInputBox(index);
                 }
@@ -166,11 +175,12 @@ namespace RochesterConverter
                 {
                     MessageBox.Show("This cell cannot be modified.");
                 }
+
+                TextBoxTextClear();
+                LoadErrorListViewData();
+                orderListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+                orderListView.SelectedIndices.Clear();
             }
-            TextBoxTextClear();
-            LoadErrorListViewData();
-            orderListView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
-            orderListView.SelectedIndices.Clear();
         }
         public bool CellModificationHeader(int index)
         {

@@ -13,9 +13,9 @@ namespace RochesterConverter.Application
             _fileOperations = fileOperations;
         }
 
-        public List<Image> LoadPdfAsImage(string path)
+        public List<Image> LoadPdfAsImage(string path, int dpi)
         {
-            return _fileOperations.LoadPdfAsImage(path);
+            return _fileOperations.LoadPdfAsImage(path, dpi);
         }
 
         public int SaveImages(List<Image> images)
